@@ -1,0 +1,41 @@
+services:
+  powersync:
+    container_name: powersync_demo
+    restart: unless-stopped
+    image: journeyapps/powersync-service:latest
+    volumes:
+      - ./powersync.yaml:/app/powersync.yaml
+    env_file:
+      - ../.env
+    ports:
+      - ${PS_PORT}:${PS_PORT}
+
+  # Source & Replication database
+  pg-db:
+    build:
+      context: .
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./pg-init:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    command: ["postgres", "-c", "wal_level=logical"]
+
+  demo-backend:
+    build:
+      context: https://github.com/powersync-ja/powersync-nodejs-backend-todolist-demo.git
+    restart: unless-stopped
+    environment:
+      DATABASE_TYPE: postgres
+      DATABASE_URI: ${PS_DATA_SOURCE_URI}
+      POWERSYNC_URL: powersync-dev # JWT audience
+      JWT_ISSUER: powersync-dev
+      PORT: 6060
+    ports:
+      - 6060:6060
+
+volumes:
+  pg_data:
