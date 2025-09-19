@@ -4,9 +4,13 @@ This repository is a playground for experimenting with the [pg_ivm](https://gith
 We are using [PowerSync](https://www.powersync.dev/) to connect to the PostgreSQL database and demonstrate the implementation of join queries without denormalization.
 
 ## Usage
-1. Run `pnpm backend:up` to start the PostgreSQL database with the pg_ivm extension and the Node.js application.
-2. Run `pnpm dev` to run some simple mutations and queries against the database.
+1. Copy the example environment file:
 
+   ```shell
+   cp .env.template .env
+   ```
+2. Run `pnpm backend:up` to start the PostgreSQL database with the pg_ivm extension and the Node.js application.
+3. Run `pnpm dev` to run some simple mutations and queries against the database.
 ## Notes
 **Updates need to be uploaded to the source database and synced down before they are reflected in the local IVM table**
 
