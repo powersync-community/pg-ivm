@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "node --experimental-strip-types src/index.ts",
+    "test": "vitest",
     "backend:up": "docker compose -f ./backend/compose.yaml --env-file .env up -d",
     "backend:down": "docker compose -f ./backend/compose.yaml --env-file .env down -v"
   },

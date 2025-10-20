@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@powersync/node':
         specifier: ^0.10.1
-        version: 0.10.1(@powersync/common@1.38.0)
+        version: 0.10.2(@powersync/common@1.40.0)
       typescript:
         specifier: ^5
         version: 5.9.2
@@ -186,13 +186,13 @@ packages:
   '@powersync/better-sqlite3@0.2.0':
     resolution: {integrity: sha512-8otwueqHJqwilUz/vLENlpMp2c4k/TV6hGX016XrZxSkizDAil99yRm7lAVwpbYYGuSgyzidyDh6vy6PY+m4kw==}
 
-  '@powersync/common@1.38.0':
-    resolution: {integrity: sha512-z2sizaSwnuN011VVGztjGgBjiA7Zlovn+soCOIH/6qhBlzEvcAedHJkH6UgOhUivsNndhB2NoT3x3kUfgWIRcg==}
+  '@powersync/common@1.40.0':
+    resolution: {integrity: sha512-0pJ9UK4Hhunxk0YSWEQ6V0YvjDVVbOv7/GcqmOyZ+vKYzTztnzDA8n+rcbCN1x3NFm69Y5V19yDwuNYoM+MH9A==}
 
-  '@powersync/node@0.10.1':
-    resolution: {integrity: sha512-hv0GhlCYjVcS83s61MLnilHVzMfgqfYz1VKG+BGpFI07nECa0EM839ABvZ2CI9fDp54NH4jmMSg5TDAKEmMxWw==}
+  '@powersync/node@0.10.2':
+    resolution: {integrity: sha512-rtmtpnD3AmBtpreOwd94Cq5BCW4bORi2VkJt1pbT4DUNBTl7lXG6/SLt9vZoLSwrp2oAG5gcN2mRilVf4h2+gw==}
     peerDependencies:
-      '@powersync/common': ^1.38.0
+      '@powersync/common': ^1.38.1
 
   '@rollup/rollup-android-arm-eabi@4.50.2':
     resolution: {integrity: sha512-uLN8NAiFVIRKX9ZQha8wy6UUs06UNSZ32xj6giK/rmMXAgKahwExvK6SsmgU5/brh4w/nSgj8e0k3c1HBQpa0A==}
@@ -671,14 +671,14 @@ snapshots:
     dependencies:
       bindings: 1.5.0
 
-  '@powersync/common@1.38.0':
+  '@powersync/common@1.40.0':
     dependencies:
       js-logger: 1.6.1
 
-  '@powersync/node@0.10.1(@powersync/common@1.38.0)':
+  '@powersync/node@0.10.2(@powersync/common@1.40.0)':
     dependencies:
       '@powersync/better-sqlite3': 0.2.0
-      '@powersync/common': 1.38.0
+      '@powersync/common': 1.40.0
       async-lock: 1.4.1
       bson: 6.10.4
       comlink: 4.4.2
