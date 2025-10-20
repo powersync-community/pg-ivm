@@ -1,36 +1,43 @@
-import { powerSyncDatabase, initPowerSync, connector } from "./powersync.ts";
+import {
+  powerSyncDatabase,
+  initPowerSync,
+  connector,
+  waitForSync,
+} from "./powersync.ts";
 
 await initPowerSync(powerSyncDatabase);
 
-const ivmLists = await powerSyncDatabase.getAll(
-  `SELECT * FROM lists_with_todos`
+const initialIvmItems = await powerSyncDatabase.getAll(
+  `SELECT * FROM line_items_ivm`
 );
-console.log("lists_with_todos: ", ivmLists.length);
+console.log("Initial line_items_ivm: ", initialIvmItems.length);
 
 console.log("Inserting new data and seeing it reflected in the IVM view...");
-const newListId = crypto.randomUUID();
+
+const newOrderId = crypto.randomUUID();
+await powerSyncDatabase.execute(
+  `INSERT INTO orders (id, reference, customer_id) VALUES (?, ?, ?)`,
+  [newOrderId, "ORD-1001", "75f89104-d95a-4f16-8309-5363f1bb377a"]
+);
+await powerSyncDatabase.execute(
+  `INSERT INTO line_items (id, order_id, product_name) VALUES (?, ?, ?)`,
+  [crypto.randomUUID(), newOrderId, "Product Z"]
+);
+
+await waitForSync(powerSyncDatabase);
+
+const updatedItemsIvm = await powerSyncDatabase.getAll(
+  `SELECT * FROM line_items_ivm`
+);
+console.log("Line_items_ivm after insert: ", updatedItemsIvm.length);
 
 await powerSyncDatabase.writeTransaction(async (tx) => {
-  await tx.execute(
-    `INSERT INTO lists (id, name, created_at, owner_id) VALUES (?, ?, ?, ?)`,
-    [newListId, "New List", new Date().toISOString(), crypto.randomUUID()]
-  );
-  await tx.execute(
-    `INSERT INTO todos (id, description, list_id, completed) VALUES (?, ?, ?, ?)`,
-    [crypto.randomUUID(), "New Todo", newListId, 0]
-  );
+  await tx.execute("DELETE FROM line_items WHERE order_id = ?", [newOrderId]);
+  await tx.execute("DELETE FROM orders WHERE id = ?", [newOrderId]);
 });
 
-await connector.uploadData(powerSyncDatabase);
+await waitForSync(powerSyncDatabase);
 
 await powerSyncDatabase.disconnectAndClear();
-await powerSyncDatabase.connect(connector);
-await powerSyncDatabase.waitForFirstSync();
-
-
-await powerSyncDatabase.readTransaction(async (tx) => {
-  const updatedIvmLists = await tx.getAll(`SELECT * FROM lists_with_todos`);
-  console.log("Updated lists_with_todos: ", updatedIvmLists.length);
-});
 
 process.exit(0);

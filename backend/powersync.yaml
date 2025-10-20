@@ -19,10 +19,11 @@ sync_rules:
   content: |
     bucket_definitions:
       global:
+        parameters: SELECT (request.parameters() ->> 'customer_id') AS customer_id
         data:
-          - SELECT * FROM lists
-          - SELECT * FROM todos
-          - SELECT * FROM lists_with_todos
+          - SELECT * FROM customers WHERE id = bucket.customer_id
+          - SELECT * FROM orders WHERE customer_id = bucket.customer_id
+          - SELECT * FROM line_items_ivm WHERE customer_id = bucket.customer_id
 
 # Client (application end user) authentication settings
 client_auth:
